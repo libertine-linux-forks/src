@@ -1,0 +1,200 @@
+# $NetBSD: CHANGES-5.2,v 1.1.2.7 2010/11/20 18:24:14 riz Exp $
+
+A complete list of changes from the NetBSD 5.0 release to the NetBSD 5.1
+release:
+
+gnu/usr.bin/groff/tmac/mdoc.local		patched by hand
+sys/sys/param.h					patched by hand
+
+	Welcome to 5.1_STABLE.
+	[riz]
+
+crypto/dist/openssl/ssl/t1_lib.c		patch
+
+	Fix a race condition. (CVE-2010-3864)
+	[christos, ticket #1479]
+
+sys/arch/x86/x86/bus_dma.c			1.54
+sys/arch/xen/x86/xen_bus_dma.c			1.21
+
+	Fix _xen_bus_dmamem_alloc_range() and _bus_dmamem_alloc_range() to
+	allow a boundary limit smaller than size. PR#42980
+	[bouyer, ticket #1348]
+
+lib/libc/citrus/modules/citrus_utf1632.c	1.10-1.11 via patch
+
+	Fix byte order bugs.
+	[tnozaki, ticket #1356]
+
+mii/igphy.c					1.21
+mii/igphyvar.h					1.1
+mii/inbmphyreg.h				1.2
+sys/dev/pci/if_wm.c				1.196-1.199,1.202,1.205
+sys/dev/pci/if_wmvar.h				1.9
+sys/dev/pci/if_wmreg.h				1.36-1.39
+sys/dev/pci/pcireg.h				1.61-1.64
+sys/dev/pci/pcidevs				1.1023
+sys/dev/pci/pcidevs.h				regen
+sys/dev/pci/pcidevs_data.h			regen
+
+	Update wm(4): Fix PR#30349, add support for 82575, 82576, 82580(ER).
+	Add two workarounds for ICH8 with igp3.  Workaround for 82566 Kumeran
+	PCS lock loss.
+	[msaitoh, ticket #1358]
+
+sys/dev/mii/miidevs				1.89, 1.93
+sys/dev/mii/miidevs.h				regen
+sys/dev/mii/miidevs_data.h			regen
+sys/dev/mii/brgphy.c				1.49, 1.52
+sys/dev/pci/if_bge.c				1.170-1.181
+sys/dev/pci/if_bgereg.h				1.53-1.56
+sys/dev/pci/if_bgevar.h				1.2-1.5
+sys/dev/pci/pcidevs				1.1017, 1.1021
+sys/dev/pci/pcidevs.h				regen
+sys/dev/pci/pcidevs_data.h			regen
+
+	Update bge(4)/brgphy(4): support for BCM5705F,BCM5714,SBCM5715S,
+	BCM5717,BCM5718,BCM5720,BCM5723,BCM5724,BCM5751F,BCM5753F,
+	BCM5756,BCM5761,BCM5761E,BCM5761S,BCM5761SE,BCM5764,BCM5781,BCM5784M,
+	BCM5903M,BCM57760,BCM57761,BCM57765,BCM57780,BCM57781,BCM57785,
+	BCM57788,BCM57790,BCM57791 and BCM57795.
+	Also BCM5461, BCM5464, BCM5784 and BCM5761, and many bugfixes.
+	[msaitoh, ticket #1359]
+
+usr.bin/passwd/local_passwd.c			1.34
+usr.bin/passwd/pam_passwd.c			1.5
+
+	Log successful and unsuccessful attempts to change passwords, via -l
+	or pam, to ease IT audit guideline compliance.  Patch from Richard
+	Hansen of BBN in private mail.
+	[gdt, ticket #1360]
+
+sys/dev/pci/agp_i810.c				1.67
+sys/dev/pci/agp_intel.c				1.35
+sys/dev/pci/pcidevs				1.1026
+sys/dev/pci/pcidevs.h				regen
+sys/dev/pci/pcidevs_data.h			regen
+
+	Add (non-IGP) AGP port support for Intel 82855GM.
+	[jakllsch, ticket #1362]
+
+distrib/notes/atari/hardware			1.23
+share/man/man4/we.4				1.17
+sys/arch/atari/conf/GENERIC.in			1.84
+sys/arch/atari/conf/ATARITT			regen
+sys/arch/atari/conf/FALCON			regen
+sys/arch/atari/conf/HADES			regen
+sys/arch/atari/conf/MILAN-ISAIDE		regen
+sys/arch/atari/conf/MILAN-PCIIDE		regen
+sys/arch/atari/conf/SMALL030			regen
+sys/arch/atari/conf/files.atari			1.116
+sys/arch/atari/vme/if_we_vme.c			1.1
+sys/arch/atari/vme/if_we_vme.c			1.2
+
+	Add support for the SMC Elite Ultra Ethernet with the SMC_TT
+	VME-ISA bridge.
+	[tsutsui, ticket #1366]
+
+distrib/notes/atari/hardware			1.24
+sys/arch/atari/atari/autoconf.c			1.57
+sys/arch/atari/conf/GENERIC.in			1.85
+sys/arch/atari/conf/HADES			regen
+sys/arch/atari/conf/HADES.in			1.10-11
+sys/arch/atari/conf/MILAN-ISAIDE		regen
+sys/arch/atari/conf/MILAN-PCIIDE		regen
+sys/arch/atari/conf/MILAN.in			1.24-25
+sys/arch/atari/conf/files.atari			1.117
+sys/arch/atari/dev/if_ne_mb.c			1.1-2
+sys/arch/x68k/dev/if_ne_intio.c			1.16
+sys/arch/x68k/dev/if_ne_neptune.c		1.20
+sys/conf/files					1.980
+sys/dev/ic/dp8390.c				1.74-75
+sys/dev/ic/ne2000.c				1.62,1.65-66,1.68,1.71-72
+sys/dev/ic/ne2000var.h				1.21, 1.25
+sys/dev/isa/if_ne_isa.c				1.27
+sys/dev/isapnp/if_ne_isapnp.c			1.27
+
+	Added NE2000 with 8bit bus width support and EtherNEC Ethernet
+	support. 
+	[tsutsui, ticket #1367]
+
+sys/arch/atari/conf/ATARITT			regen
+sys/arch/atari/conf/FALCON			regen
+sys/arch/atari/conf/GENERIC.in			1.86
+sys/arch/atari/conf/HADES			regen
+sys/arch/atari/conf/MILAN-ISAIDE		regen
+sys/arch/atari/conf/MILAN-PCIIDE		regen
+sys/arch/atari/conf/SMALL030			regen
+sys/arch/atari/dev/ser.c			1.49 via patch
+
+	Allow atari users to change serial console behavior with
+	binpatch(8), and disable options SERCONSOLE in default kernels.
+	[tsutsui, ticket #1368]
+
+usr.bin/ftp/fetch.c				1.189 via patch
+
+	avoid NULL dereference in log output if the command line parser
+	failed to extract a port number from the URL
+	[lukem, ticket #1369]
+
+usr.bin/ftp/extern.h				1.78
+usr.bin/ftp/fetch.c				1.192
+usr.bin/ftp/util.c				1.153 via patch
+
+	Parse HTTP 'Date' entries in the `C' locale rather than the user's.
+	Fix from [bin/42917] (with minor changes), from KAMADA Ken'ichi.
+	[lukem, ticket #1370]
+
+distrib/atari/floppies/install/list		1.13
+distrib/atari/floppies/prepare/list		1.7
+
+	Add dd(1) to install ramdisk binaries.
+	[tsutsui, ticket #1371]
+
+sys/arch/atari/dev/atari5380.c			1.54
+sys/arch/atari/dev/dma.c			1.25
+
+	Always schedule callback functions via add_sicallback(),
+	which calls softint_schedule(9).
+	[tsutsui, ticket #1373]
+
+share/man/man4/udav.4				1.4
+sys/dev/usb/if_udav.c				1.30
+sys/dev/usb/usbdevs				1.549
+sys/dev/usb/usbdevs.h				regen
+sys/dev/usb/usbdevs_data.h			regen
+
+	Add support for SUNRISING SR9600 Fast Ethernet.
+	[jmcneill, ticket #1379]
+
+sys/dev/pckbport/synaptics.c			1.22-24
+sys/dev/pckbport/synapticsreg.h			1.6
+
+	Fix the synaptics touchpad passthrough device support. PR#42853.
+	[plunky, ticket #1383]
+
+sys/dev/pci/if_pcn.c				1.51
+
+	silence "boot -z"
+	[hubertf, ticket #1385]
+
+sys/dev/isa/pcppi.c				1.33
+sys/dev/pad/pad.c				1.11
+sys/dev/raidframe/rf_netbsdkintf.c		1.258
+sys/dev/scsipi/cd.c				1.288
+sys/kern/subr_autoconf.c			1.169
+
+	'boot -z' bogons
+	[hubertf, ticket #1386]
+
+sys/dev/ic/esiop.c				1.52 via patch
+sys/dev/ic/siop.c				1.95 via patch
+
+	Improve error paths in (e)siop_scsipi_request(). PR#42844
+	[mhitch, ticket #1390]
+
+sys/dev/pci/piixpm.c				1.28
+
+	Fix dmesg output for piixpm (cosmetic).  PR#43278
+	[martin, ticket #1391]
+
