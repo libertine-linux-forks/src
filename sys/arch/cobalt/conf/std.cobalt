@@ -1,0 +1,12 @@
+#	$NetBSD: std.cobalt,v 1.14.8.1 2011/03/05 15:09:34 bouyer Exp $
+
+machine cobalt mips
+include		"conf/std"	# MI standard options
+
+options 	MIPS3
+options 	MIPS3_ENABLE_CLOCK_INTR
+
+options 	EXEC_ELF32	# exec ELF32 binaries
+options 	EXEC_SCRIPT	# exec #! scripts
+
+makeoptions	DEFTEXTADDR="0x80001000"

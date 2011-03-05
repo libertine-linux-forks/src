@@ -1,0 +1,140 @@
+.\"     $NetBSD: rumphijack.3,v 1.2.2.4 2011/03/05 15:09:23 bouyer Exp $
+.\"
+.\" Copyright (c) 2011 Antti Kantee.  All rights reserved.
+.\"
+.\" Redistribution and use in source and binary forms, with or without
+.\" modification, are permitted provided that the following conditions
+.\" are met:
+.\" 1. Redistributions of source code must retain the above copyright
+.\"    notice, this list of conditions and the following disclaimer.
+.\" 2. Redistributions in binary form must reproduce the above copyright
+.\"    notice, this list of conditions and the following disclaimer in the
+.\"    documentation and/or other materials provided with the distribution.
+.\"
+.\" THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
+.\" ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+.\" IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+.\" ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
+.\" FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+.\" DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+.\" OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+.\" HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+.\" LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+.\" OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+.\" SUCH DAMAGE.
+.\"
+.Dd February 18, 2011
+.Dt RUMPHIJACK 3
+.Os
+.Sh NAME
+.Nm rumphijack
+.Nd System call hijack library
+.Sh LIBRARY
+used by
+.Xr ld.so 1
+.Sh DESCRIPTION
+The
+.Xr ld.so 1
+runtime linker can be instructed to load
+.Nm
+between the main object and other libraries.
+This enables
+.Nm
+to capture and redirect system call requests to a rump kernel instead
+of the host kernel.
+.Pp
+The behaviour of hijacked applications is affected by the following
+environment variables:
+.Bl -tag -width 12345
+.It Ev RUMPHIJACK
+If present, this variable specifies which system calls should be
+hijacked.
+The string is parsed as a comma-separated list of
+.Dq name=value
+tuples.
+The possible lefthandside names are:
+.Bl -tag -width xxsocketxx
+.It Dq path
+Pathname-based system calls are hijacked if the path the system
+call is directed to resides under
+.Ar value .
+In case of an absolute pathname argument, a literal prefix comparison is made.
+In case of a relative pathname, the current working direct is
+examined.
+This also implies that neither
+.Dq ..
+nor symbolic links will cause the namespace to be switched.
+.It Dq socket
+The specifier
+.Ar value
+contains a colon-separated list of which protocol families should
+be hijacked.
+The special value
+.Dq all
+can be specified as the first element.
+It indicates that all protocol families should be hijacked.
+Some can then be disabled by prepending
+.Dq no
+to the name of the protocol family.
+.Pp
+For example,
+.Dq inet:inet6
+specifies that only
+.Dv PF_INET
+and
+.Dv PF_INET6
+sockets should be hijacked,
+while
+.Dq all:noinet
+specifies that all protocol families except
+.Dv PF_INET
+should be hijacked.
+.El
+.Pp
+If the environment variable is unset, the default value
+.Qq path=/rump,socket=all:nolocal
+is used.
+The rationale for this is to have networked X clients work
+out-of-the-box: X clients use local sockets to communicate with
+the server, so local sockets must be used as a host service.
+.Pp
+An empty string as a value means no calls are hijacked.
+.It Ev RUMPHIJACK_RETRYCONNECT
+Change how
+.Xr rumpclient 3
+attempts to reconnect to the server in case the connection is lost.
+Acceptable values are:
+.Bl -tag -width xxinftimexx
+.It Dq inftime
+retry indefinitely
+.It Dq once
+retry once, when that connection fails, give up
+.It Dq die
+call
+.Xr exit 3
+if connection failure is detected
+.It n
+Attempt reconnect for n seconds.
+The value 0 means reconnection is not attempted.
+The value n must be a positive integer.
+.El
+.Pp
+See
+.Xr rumpclient 3
+for more discussion.
+.El
+.Sh EXAMPLES
+Use an alternate TCP/IP stack for firefox with a persistent server
+connection:
+.Bd -literal -offset indent
+$ setenv RUMP_SERVER unix:///tmp/tcpip
+$ setenv LD_PRELOAD /usr/lib/librumphijack.so
+$ setenv RUMPHIJACK_RETRYCONNECT inftime
+$ firefox
+.Ed
+.Sh SEE ALSO
+.Xr ld.so 1 ,
+.Xr rump_server 1 ,
+.Xr rump 3 ,
+.Xr rumpclient 3 ,
+.Xr rump_sp 7
